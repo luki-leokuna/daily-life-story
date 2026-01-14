@@ -14,7 +14,7 @@
                     {{ $story->category->name }}
                 </span>
                 <h1 class="display-3 fw-bold mb-4" style="line-height: 1.2;">{{ $story->title }}</h1>
-                
+
                 <div class="d-flex justify-content-center align-items-center text-muted small text-uppercase tracking-widest">
                     <span>{{ $story->created_at->format('F d, Y') }}</span>
                     <span class="mx-3">&bull;</span>
@@ -24,8 +24,8 @@
 
             {{-- FEATURED IMAGE: Full Width Rounded --}}
             <div class="mb-5">
-                <img src="{{ asset('images/stories/' . $story->featured_image) }}" 
-                     class="img-fluid rounded-4 shadow-sm w-100" 
+                <img src="{{ asset('images/stories/' . $story->featured_image) }}"
+                     class="img-fluid rounded-4 shadow-sm w-100"
                      style="max-height: 550px; object-fit: cover;"
                      alt="{{ $story->title }}">
                 @if($story->image_caption) {{-- Opsional jika kamu punya field caption --}}
@@ -44,6 +44,35 @@
                 <div class="story-content mb-5" style="font-size: 1.15rem; line-height: 2; color: #333;">
                     {!! nl2br(e($story->content)) !!}
                 </div>
+            </div>
+            <hr class="my-5">
+
+            {{-- List Komentar --}}
+            <div class="comments-section">
+                <h5 class="fw-bold mb-4">Komentar ({{ $story->comments ? $story->comments->count() : 0 }})</h5>
+
+                @foreach($story->comments as $comment)
+                <div class="mb-3 d-flex">
+                    <div class="flex-grow-1 border-bottom pb-3">
+                        <span class="fw-bold small">{{ $comment->user->name }}</span>
+                        <span class="text-muted small ms-2">{{ $comment->created_at->diffForHumans() }}</span>
+                        <p class="mt-2 small text-secondary">{{ $comment->body }}</p>
+                    </div>
+                </div>
+                @endforeach
+
+                {{-- Form Tambah Komentar --}}
+                @auth
+                <form action="{{ route('comments.store', $story->id) }}" method="POST" class="mt-4">
+                    @csrf
+                    <div class="mb-3">
+                        <textarea name="body" class="form-control bg-light border-0" rows="3" placeholder="Tulis komentar kamu..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-dark btn-sm px-4">Kirim Komentar</button>
+                </form>
+                @else
+                <p class="small text-muted mt-4">Silahkan <a href="{{ route('login') }}">login</a> untuk ikut berkomentar.</p>
+                @endauth
             </div>
 
             {{-- TAGS: Minimalist style --}}
@@ -64,30 +93,30 @@
                    <span class="small text-muted text-uppercase d-block mb-3 tracking-widest" style="font-size: 0.7rem;">Bagikan cerita:</span>
                    <div class="share-links d-flex gap-4">
                       {{-- WhatsApp --}}
-                      <a href="https://wa.me/?text={{ $story->title }} {{ url()->current() }}" 
+                      <a href="https://wa.me/?text={{ $story->title }} {{ url()->current() }}"
                          target="_blank" class="share-icon-link" title="Share ke WhatsApp">
                           <i class="bi bi-whatsapp"></i>
                       </a>
 
                       {{-- Pinterest (Sangat cocok untuk web estetik seperti ini) --}}
-                      <a href="https://pinterest.com/pin/create/button/?url={{ url()->current() }}&media={{ asset('images/stories/' . $story->featured_image) }}&description={{ $story->title }}" 
+                      <a href="https://pinterest.com/pin/create/button/?url={{ url()->current() }}&media={{ asset('images/stories/' . $story->featured_image) }}&description={{ $story->title }}"
                          target="_blank" class="share-icon-link" title="Save to Pinterest">
                          <i class="bi bi-pinterest"></i>
                       </a>
 
                      {{-- Instagram (Instagram tidak punya direct share link, biasanya diarahkan ke profil atau copy link) --}}
-                     <a href="https://www.instagram.com/" 
+                     <a href="https://www.instagram.com/"
                         target="_blank" class="share-icon-link" title="Follow us on Instagram">
                         <i class="bi bi-instagram"></i>
                      </a>
-            
+
                      {{-- Tambahan: Copy Link (Sangat berguna) --}}
                      <a href="javascript:void(0)" onclick="copyToClipboard()" class="share-icon-link" title="Salin Tautan">
                         <i class="bi bi-link-45deg"></i>
                      </a>
                </div>
            </div>
-    
+
            <a href="{{ route('home') }}" class="btn-read-more">
               &larr; Kembali ke Home
            </a>
@@ -132,7 +161,7 @@
             <div class="col-md-4">
                 <article class="card h-100 border-0 bg-transparent">
                     <a href="{{ route('story.show', $related->slug) }}" class="rounded-4 overflow-hidden mb-3 d-block">
-                        <img src="{{ asset('images/stories/' . $related->featured_image) }}" 
+                        <img src="{{ asset('images/stories/' . $related->featured_image) }}"
                              class="card-img-top" alt="{{ $related->title }}" style="height: 200px; object-fit: cover;">
                     </a>
                     <div class="card-body p-0">

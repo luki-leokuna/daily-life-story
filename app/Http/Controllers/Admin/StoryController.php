@@ -8,12 +8,18 @@ use App\Models\Category;
 use App\Models\StoryTag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class StoryController extends Controller
 {
     public function index()
     {
-        $stories = Story::with('category')->orderBy('created_at', 'desc')->get();
+        // HANYA mengambil cerita milik user yang sedang login
+        $stories = Story::with('category')
+            ->where($user_id =Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view('pages.admin.stories.index', compact('stories'));
     }
 
@@ -44,6 +50,9 @@ class StoryController extends Controller
         $validated['slug'] = Str::slug($validated['title']);
         $validated['is_featured'] = $request->has('is_featured');
 
+        // OTOMATIS mencatat ID user yang sedang login sebagai pemilik cerita
+        $validated['user_id'] = Auth::id();
+
         $story = Story::create($validated);
 
         if ($request->filled('tags')) {
@@ -57,25 +66,34 @@ class StoryController extends Controller
         }
 
         return redirect()->route('admin.stories.index')
-            ->with('success', 'Story berhasil ditambahkan!');
+            ->with('success', 'Cerita kamu berhasil diterbitkan ke komunitas!');
     }
 
     public function show($id)
     {
-        $story = Story::with(['category', 'tags'])->findOrFail($id);
+        // Memastikan hanya bisa melihat detail milik sendiri di dashboard admin
+        $story = Story::with(['category', 'tags'])
+            ->where($user_id =Auth::id())
+            ->findOrFail($id);
+
         return view('pages.admin.stories.show', compact('story'));
     }
 
     public function edit($id)
     {
-        $story = Story::with('tags')->findOrFail($id);
+        // User lain tidak akan bisa masuk ke halaman edit cerita orang lain
+        $story = Story::with('tags')
+            ->where($user_id =Auth::id())
+            ->findOrFail($id);
+
         $categories = Category::all();
         return view('pages.admin.stories.edit', compact('story', 'categories'));
     }
 
     public function update(Request $request, $id)
     {
-        $story = Story::findOrFail($id);
+        // Cari cerita milik user tersebut
+        $story = Story::where($user_id =Auth::id()) ->findOrFail($id);
 
         $validated = $request->validate([
             'title' => 'required|max:255',
@@ -116,12 +134,13 @@ class StoryController extends Controller
         }
 
         return redirect()->route('admin.stories.index')
-            ->with('success', 'Story berhasil diupdate!');
+            ->with('success', 'Cerita berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
-        $story = Story::findOrFail($id);
+        // Pastikan hanya bisa menghapus ceritanya sendiri
+        $story = Story::where($user_id =Auth::id()) ->findOrFail($id);
 
         $imagePath = public_path('images/stories/' . $story->featured_image);
         if (file_exists($imagePath)) {
@@ -131,6 +150,6 @@ class StoryController extends Controller
         $story->delete();
 
         return redirect()->route('admin.stories.index')
-            ->with('success', 'Story berhasil dihapus!');
+            ->with('success', 'Cerita telah dihapus dari profilmu.');
     }
 }

@@ -40,7 +40,7 @@ class StoryController extends Controller
     public function show($slug)
     {
         $story = Story::with(['category', 'tags'])->where('slug', $slug)->firstOrFail();
-        
+
         $story->increment('views');
 
         $relatedStories = Story::where('category_id', $story->category_id)
@@ -50,4 +50,6 @@ class StoryController extends Controller
 
         return view('pages.story-detail', compact('story', 'relatedStories'));
     }
+
+
 }

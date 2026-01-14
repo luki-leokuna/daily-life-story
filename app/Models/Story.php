@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 class Story extends Model
 {
     protected $fillable = [
+        'user_id',
         'title',
         'slug',
         'excerpt',
@@ -41,5 +42,15 @@ class Story extends Model
     public function tags()
     {
         return $this->hasMany(StoryTag::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

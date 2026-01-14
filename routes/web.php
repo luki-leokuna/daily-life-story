@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\StoryController as AdminStoryController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CommentController;
 
 // Public Routes
 Route::get('/', [StoryController::class, 'index'])->name('home');
@@ -14,6 +15,11 @@ Route::get('/story/{slug}', [StoryController::class, 'show'])->name('story.show'
 Route::get('/about', function () {
     return view('pages.about');
 })->name('about');
+
+//rute comment
+Route::post('/story/{story}/comment', [CommentController::class, 'store'])
+      ->name('comments.store')
+      ->middleware('auth');
 
 // --- ROUTE AUTENTIKASI ---
 Route::middleware('guest')->group(function () {
