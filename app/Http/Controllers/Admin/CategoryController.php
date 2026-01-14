@@ -12,7 +12,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::withCount('stories')->get();
-        return view('pages.admin.categories.index', compact('categories'));
+        return view('pages.admin.stories.categories.index', compact('categories'));
     }
 
     public function create()
