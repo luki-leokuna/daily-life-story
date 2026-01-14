@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 
 // Public Routes
 Route::get('/', [StoryController::class, 'index'])->name('home');
@@ -20,6 +21,10 @@ Route::get('/about', function () {
 Route::post('/story/{story}/comment', [CommentController::class, 'store'])
       ->name('comments.store')
       ->middleware('auth');
+
+Route::post('/story/{story}/like', [LikeController::class, 'toggle'])
+    ->name('stories.like')
+    ->middleware('auth');
 
 // --- ROUTE AUTENTIKASI ---
 Route::middleware('guest')->group(function () {

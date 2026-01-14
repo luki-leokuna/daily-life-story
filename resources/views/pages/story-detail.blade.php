@@ -74,7 +74,23 @@
                 <p class="small text-muted mt-4">Silahkan <a href="{{ route('login') }}">login</a> untuk ikut berkomentar.</p>
                 @endauth
             </div>
-
+            {{-- tombol like --}}
+            <div class="d-flex align-items-center mb-4">
+                <button id="btn-like" data-id="{{ $story->id }}" class="btn border-0 p-0 me-2" style="background: none; outline: none shadow: none;">
+                    @auth
+                        @if($story->isLikedBy(auth()->user()))
+                            <i id="like-icon" class="bi bi-heart-fill text-danger fs-4"></i>
+                        @else
+                            <i id="like-icon" class="bi bi-heart fs-4 text-secondary"></i>
+                        @endif
+                    @else
+                        <i class="bi bi-heart fs-4 text-secondary"></i>
+                    @endauth
+                </button>
+                <span id="like-count" class="fw-bold small text-muted">
+                    {{ $story->likes()->count() }} orang menyukai ini
+                </span>
+            </div>
             {{-- TAGS: Minimalist style --}}
             @if($story->tags->count() > 0)
             <div class="mt-5 pt-4 border-top">
@@ -196,5 +212,57 @@
         color: var(--primary-color);
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const likeBtn = document.getElementById('btn-like');
+    const likeIcon = document.getElementById('like-icon');
+    const likeCount = document.getElementById('like-count');
+
+    if (likeBtn) {
+        likeBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const storyId = this.getAttribute('data-id');
+
+            // Kirim permintaan ke server menggunakan Fetch API
+            fetch(`/story/${storyId}/like`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // CSRF Token wajib untuk keamanan Laravel
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.status === 401) {
+                    // Jika user belum login, arahkan ke halaman login
+                    window.location.href = '{{ route("login") }}';
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data) {
+                    // 1. Update Ikon (Toggle Class)
+                    if (data.isLiked) {
+                        likeIcon.classList.replace('bi-heart', 'bi-heart-fill');
+                        likeIcon.classList.add('text-danger');
+                        likeIcon.classList.remove('text-secondary');
+                    } else {
+                        likeIcon.classList.replace('bi-heart-fill', 'bi-heart');
+                        likeIcon.classList.remove('text-danger');
+                        likeIcon.classList.add('text-secondary');
+                    }
+
+                    // 2. Update Angka Like secara dinamis
+                    likeCount.innerText = `${data.count} orang menyukai ini`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    }
+});
+</script>
 
 @endsection
