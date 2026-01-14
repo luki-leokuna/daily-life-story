@@ -4,99 +4,128 @@
 
 @section('content')
 
-<div class="container my-5">
+<div class="container">
 
-    {{-- SEARCH & FILTERS --}}
-    <div class="row mb-5">
-        <div class="col-md-8 mx-auto">
-            <form action="{{ route('home') }}" method="GET">
-                <div class="input-group input-group-lg">
-                    <input type="text" name="search" class="form-control" 
-                           placeholder="Search stories..." 
-                           value="{{ $search }}">
-                    <button class="btn btn-primary" type="submit">Search</button>
-                </div>
+    {{-- SEARCH SECTION: Dibuat lebih minimalis --}}
+    <div class="row mb-5 justify-content-center">
+        <div class="col-md-6 text-center">
+            <form action="{{ route('home') }}" method="GET" class="position-relative">
+                <input type="text" name="search" 
+                       class="form-control border-0 bg-white shadow-sm rounded-pill px-4 py-3" 
+                       placeholder="Cari cerita hari ini..." 
+                       value="{{ $search }}"
+                       style="font-style: italic;">
+                <button class="btn position-absolute end-0 top-0 mt-1 me-2" type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search text-muted" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                </button>
             </form>
         </div>
     </div>
 
-    {{-- CATEGORIES --}}
-    <div class="text-center mb-5">
+    {{-- CATEGORIES: Berubah dari tombol menjadi link teks estetik --}}
+    <div class="text-center mb-5 pb-4 border-bottom">
         <a href="{{ route('home') }}" 
-           class="btn btn-sm {{ !$categorySlug ? 'btn-primary' : 'btn-outline-secondary' }} me-2">
-            All
+           class="text-decoration-none mx-3 {{ !$categorySlug ? 'fw-bold text-dark border-bottom border-2 border-primary' : 'text-muted' }} small text-uppercase tracking-widest">
+            Semua Cerita
         </a>
         @foreach($categories as $cat)
             <a href="{{ route('home', ['category' => $cat->slug]) }}" 
-               class="btn btn-sm {{ $categorySlug == $cat->slug ? 'btn-primary' : 'btn-outline-secondary' }} me-2">
-                {{ $cat->name }} ({{ $cat->stories_count }})
+               class="text-decoration-none mx-3 {{ $categorySlug == $cat->slug ? 'fw-bold text-dark border-bottom border-2 border-primary' : 'text-muted' }} small text-uppercase tracking-widest">
+                {{ $cat->name }} <span class="opacity-50">({{ $cat->stories_count }})</span>
             </a>
         @endforeach
     </div>
 
-    {{-- FEATURED STORY --}}
+    {{-- FEATURED STORY: Layout Majalah (Hero) --}}
     @if($featuredStory && !$search && !$categorySlug)
-    <div class="row mb-5">
-        <div class="col-12">
-            <div class="card shadow-lg">
-                <div class="row g-0">
-                    <div class="col-md-6">
-                        <img src="{{ asset('images/stories/' . $featuredStory->featured_image) }}" 
-                             class="img-fluid" 
-                             style="height: 400px; width: 100%; object-fit: cover;"
-                             alt="{{ $featuredStory->title }}">
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card-body p-5">
-                            <span class="category-badge" style="background: {{ $featuredStory->category->color }}">
-                                {{ $featuredStory->category->name }}
-                            </span>
-                            <h2 class="card-title mt-3">{{ $featuredStory->title }}</h2>
-                            <p class="card-text text-muted">{{ $featuredStory->excerpt }}</p>
-                            <a href="{{ route('story.show', $featuredStory->slug) }}" class="btn btn-primary">
-                                Read More →
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    <div class="row align-items-center mb-5 pb-5">
+        <div class="col-lg-7 px-0 px-lg-3">
+            <div class="overflow-hidden rounded-4 shadow-sm">
+                <img src="{{ asset('images/stories/' . $featuredStory->featured_image) }}" 
+                     class="img-fluid w-100 transition-image" 
+                     style="height: 500px; object-fit: cover;"
+                     alt="{{ $featuredStory->title }}">
             </div>
+        </div>
+        <div class="col-lg-5 p-5">
+            <span class="category-badge mb-3 d-inline-block" style="color: {{ $featuredStory->category->color }}">
+                {{ $featuredStory->category->name }}
+            </span>
+            <h1 class="display-5 mb-3">{{ $featuredStory->title }}</h1>
+            <p class="text-muted mb-4 fs-5">{{ $featuredStory->excerpt }}</p>
+            <a href="{{ route('story.show', $featuredStory->slug) }}" class="btn-read-more">
+                Baca Selengkapnya
+            </a>
         </div>
     </div>
     @endif
 
-    {{-- STORIES GRID --}}
-    <div class="row">
+    {{-- STORIES GRID: Lebih bersih tanpa border card --}}
+    <div class="row g-5">
         @forelse($stories as $story)
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <img src="{{ asset('images/stories/' . $story->featured_image) }}" 
-                     class="card-img-top" 
-                     alt="{{ $story->title }}">
-                <div class="card-body">
-                    <span class="category-badge" style="background: {{ $story->category->color }}">
+        <div class="col-md-4">
+            <article class="card h-100">
+                <a href="{{ route('story.show', $story->slug) }}" class="overflow-hidden rounded-4 mb-3">
+                    <img src="{{ asset('images/stories/' . $story->featured_image) }}" 
+                         class="card-img-top" 
+                         alt="{{ $story->title }}">
+                </a>
+                <div class="card-body px-0 pt-2">
+                    <span class="category-badge mb-2 d-inline-block" style="color: {{ $story->category->color }}">
                         {{ $story->category->name }}
                     </span>
-                    <h5 class="card-title mt-3">{{ $story->title }}</h5>
-                    <p class="card-text text-muted">{{ Str::limit($story->excerpt, 100) }}</p>
-                    <a href="{{ route('story.show', $story->slug) }}" class="btn btn-sm btn-outline-primary">
-                        Read More →
+                    <h5 class="card-title fw-bold">
+                        <a href="{{ route('story.show', $story->slug) }}" class="text-decoration-none text-dark">
+                            {{ $story->title }}
+                        </a>
+                    </h5>
+                    <p class="card-text text-muted small">{{ Str::limit($story->excerpt, 110) }}</p>
+                    <a href="{{ route('story.show', $story->slug) }}" class="btn-read-more">
+                        Lanjut Membaca
                     </a>
                 </div>
-            </div>
+            </article>
         </div>
         @empty
         <div class="col-12 text-center py-5">
-            <h4 class="text-muted">No stories found</h4>
-            <p>Try a different search or category</p>
+            <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="Not found" style="width: 200px;" class="mb-4">
+            <h4 class="text-muted">Oops, tidak ada cerita ditemukan.</h4>
         </div>
         @endforelse
     </div>
 
-    {{-- PAGINATION --}}
-    <div class="d-flex justify-content-center mt-5">
+    {{-- PAGINATION: Custom styling --}}
+    <div class="d-flex justify-content-center mt-5 pt-5">
         {{ $stories->links() }}
     </div>
 
 </div>
+
+<style>
+    /* Tambahan internal CSS khusus untuk halaman ini */
+    .transition-image {
+        transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .transition-image:hover {
+        transform: scale(1.05);
+    }
+    .tracking-widest {
+        letter-spacing: 0.15em;
+    }
+    /* Menyesuaikan pagination Laravel agar lebih cantik dengan Bootstrap 5 */
+    .pagination .page-link {
+        border: none;
+        color: var(--text-muted);
+        background: transparent;
+        margin: 0 5px;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        color: white;
+    }
+</style>
 
 @endsection
