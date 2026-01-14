@@ -23,7 +23,6 @@ return new class extends Migration
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
-            $table->string('email')->unique();
             $table->string('avatar')->nullable(); // Tambahkan ini jika ingin ada foto profil penulis
             $table->string('token');
             $table->timestamp('created_at')->nullable();
