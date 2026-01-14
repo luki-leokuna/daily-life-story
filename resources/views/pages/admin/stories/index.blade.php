@@ -43,8 +43,8 @@
                 <tr>
                     <td>{{ $story->id }}</td>
                     <td>
-                        <img src="{{ asset('images/stories/' . $story->featured_image) }}" 
-                             alt="{{ $story->title }}" 
+                        <img src="{{ asset('images/stories/' . $story->featured_image) }}"
+                             alt="{{ $story->title }}"
                              class="img-thumbnail"
                              style="width: 100px; height: 70px; object-fit: cover;">
                     </td>
@@ -69,17 +69,17 @@
                     <td>{{ $story->created_at->format('d/m/Y') }}</td>
                     <td>
                         <div class="btn-group-vertical" role="group">
-                            <a href="{{ route('story.show', $story->slug) }}" 
-                               class="btn btn-sm btn-info mb-1" 
+                            <a href="{{ route('story.show', $story->slug) }}"
+                               class="btn btn-sm btn-info mb-1"
                                target="_blank">
                                 👁️ View
                             </a>
-                            <a href="{{ route('admin.stories.edit', $story->id) }}" 
+                            <a href="{{ route('admin.stories.edit', $story->id) }}"
                                class="btn btn-sm btn-warning mb-1">
                                 ✏️ Edit
                             </a>
-                            <form action="{{ route('admin.stories.destroy', $story->id) }}" 
-                                  method="POST" 
+                            <form action="{{ route('admin.stories.destroy', $story->id) }}"
+                                  method="POST"
                                   onsubmit="return confirm('Delete this story?')">
                                 @csrf
                                 @method('DELETE')

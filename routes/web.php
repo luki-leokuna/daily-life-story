@@ -22,9 +22,14 @@ Route::post('/story/{story}/comment', [CommentController::class, 'store'])
       ->name('comments.store')
       ->middleware('auth');
 
+//rute like
 Route::post('/story/{story}/like', [LikeController::class, 'toggle'])
     ->name('stories.like')
     ->middleware('auth');
+
+//rute untuk
+// Route untuk melihat profil user lain
+Route::get('/profile/{user:name}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
 
 // --- ROUTE AUTENTIKASI ---
 Route::middleware('guest')->group(function () {

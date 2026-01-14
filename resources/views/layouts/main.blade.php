@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Daily Life Stories')</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 
     <style>
@@ -18,7 +18,7 @@
             --text-main: #2d2d2d;
             --text-muted: #6b7280;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-body);
@@ -96,7 +96,7 @@
         }
 
         .tracking-widest { letter-spacing: 0.2em; }
-        
+
         /* Transition untuk Image Hover */
         .overflow-hidden img {
             transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -109,14 +109,14 @@
     .line-clamp-2 {
         display: -webkit-box;
         -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;  
+        -webkit-box-orient: vertical;
         overflow: hidden;
     }
 
     .line-clamp-3 {
         display: -webkit-box;
         -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;  
+        -webkit-box-orient: vertical;
         overflow: hidden;
         min-height: 3.5rem; /* Memberi ruang deskripsi yang sama */
     }
@@ -169,18 +169,18 @@
     </style>
 </head>
 <body>
-    
+
     {{-- NAVBAR --}}
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
                 daily life<span style="color: var(--primary-color)">.</span>
             </a>
-            
+
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-center">
                     <li class="nav-item">
@@ -193,7 +193,7 @@
                     {{-- AUTHENTICATION LOGIC --}}
                     @guest
                         <li class="nav-item ms-lg-4">
-                            <a class="nav-link btn btn-outline-dark px-3 py-2 rounded-pill text-dark" 
+                            <a class="nav-link btn btn-outline-dark px-3 py-2 rounded-pill text-dark"
                                href="{{ route('login') }}" style="font-size: 0.7rem;">Sign In</a>
                         </li>
                     @else
@@ -230,7 +230,7 @@
             <p class="text-muted mb-4 mx-auto" style="max-width: 500px;">
                 Mendokumentasikan momen-momen kecil yang memberikan warna dalam perjalanan keseharian kita.
             </p>
-            
+
             <div class="d-flex justify-content-center gap-4 mb-5">
                 <a href="#" class="text-dark"><i class="bi bi-instagram"></i></a>
                 <a href="#" class="text-dark"><i class="bi bi-pinterest"></i></a>
@@ -239,9 +239,9 @@
 
             <div class="pt-4 border-top">
                 <p class="mb-0 small text-muted opacity-50 tracking-widest text-uppercase">
-                    &copy; 2026 Crafted with Love. 
+                    &copy; 2026 Crafted with Love.
                     @guest
-                        <a href="{{ route('login') }}" class="text-decoration-none text-muted ms-2">• Admin</a>
+                        <a href="{{ route('login') }}" class="text-decoration-none text-muted ms-2">• Daily life</a>
                     @endguest
                 </p>
             </div>
