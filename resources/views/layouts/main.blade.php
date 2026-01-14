@@ -104,6 +104,32 @@
         .overflow-hidden:hover img {
             transform: scale(1.05);
         }
+
+     /* Membatasi baris teks agar seragam (Editorial Standard) */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;  
+        overflow: hidden;
+    }
+
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;  
+        overflow: hidden;
+        min-height: 3.5rem; /* Memberi ruang deskripsi yang sama */
+    }
+
+    /* Memperhalus garis bawah tombol */
+    .btn-read-more {
+        border-bottom: 1.5px solid var(--primary-color);
+        padding-bottom: 2px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 700;
+    }
     </style>
 </head>
 <body>
