@@ -30,9 +30,10 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-dark w-100 p-3 rounded-pill shadow-sm mb-4">
-                    Sign In
-                </button>
+                <form action="{{ route('login') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-dark w-100">Sign In</button>
+                </form>
 
                 <div class="text-center">
                     <p class="small text-muted">Belum punya akun? <a href="{{ route('register') }}" class="text-dark fw-bold text-decoration-none border-bottom border-dark">Daftar sekarang</a></p>

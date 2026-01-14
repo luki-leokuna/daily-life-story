@@ -21,13 +21,13 @@ class LoginController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            // Arahkan ke dashboard admin setelah sukses
-            return redirect()->intended(route('admin.stories.index'));
-        }
 
+            // 3. Direct LANGSUNG ke halaman home
+            // Menggunakan route name 'home' yang sudah kita atur di web.php
+            return redirect()->route('home')->with('success', 'Selamat datang kembali!');
+        }
         return back()->withErrors([
             'email' => 'Email atau password yang kamu masukkan salah.',
         ])->onlyInput('email');
