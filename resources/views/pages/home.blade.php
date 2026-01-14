@@ -110,12 +110,12 @@
         @empty
         {{-- Empty state tetap sama --}}
         @endforelse
-    </div>
-    {{-- PAGINATION: Custom styling --}}
-    <div class="d-flex justify-content-center mt-5 pt-5">
-        {{ $stories->links() }}
-    </div>
-
+        {{-- Bagian Pagination --}}
+    @if ($stories->hasPages())
+        <div class="d-flex justify-content-center mt-5 mb-5">
+            {{ $stories->links() }}
+        </div>
+    @endif
 </div>
 
 <style>

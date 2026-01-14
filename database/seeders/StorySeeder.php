@@ -79,7 +79,7 @@ class StorySeeder extends Seeder
                 'title' => 'Meal Prep Sunday Made Easy',
                 'excerpt' => 'My simple system for preparing healthy meals for the entire week.',
                 'content' => 'Meal prep used to intimidate me until I developed this easy system. Now I spend just 2 hours on Sunday preparing five days worth of healthy lunches and dinners. The key is choosing recipes that share ingredients.',
-                'featured_image' => 'meal-prep.jpe  g',
+                'featured_image' => 'meal-prep.jpeg',
                 'category_id' => 3,
                 'is_featured' => false,
                 'tags' => ['meal-prep', 'healthy', 'cooking']
@@ -259,7 +259,7 @@ class StorySeeder extends Seeder
                 'title' => 'Screen Time Balance for Families',
                 'excerpt' => 'Creating healthy tech boundaries without constant battles.',
                 'content' => 'Managing screen time does not have to be a daily fight. We established clear rules, created tech-free zones, and lead by example. Our kids now self-regulate much better.',
-                'featured_image' => 'screen-time.jpeg',
+                'featured_image' => 'screen-time.jpg',
                 'category_id' => 4,
                 'is_featured' => false,
                 'tags' => ['screen-time', 'parenting', 'balance']

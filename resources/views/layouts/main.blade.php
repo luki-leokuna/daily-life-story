@@ -130,6 +130,42 @@
         letter-spacing: 1px;
         font-weight: 700;
     }
+
+    /* Menghilangkan teks informasi pagination (Showing 1 to 12...) */
+    .pagination nav .flex.justify-between.flex-1 {
+        display: none !important;
+    }
+
+    .pagination nav div:first-child {
+        display: none !important;
+    }
+
+    /* Merapikan angka navigasi agar sesuai tema 'Daily Life' */
+    .pagination {
+        margin-top: 3rem;
+        gap: 10px;
+    }
+
+    .page-item .page-link {
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        padding: 8px 16px;
+        border-radius: 50% !important; /* Membuat lingkaran saat hover */
+        transition: 0.3s;
+    }
+
+    .page-item.active .page-link {
+        background-color: var(--primary-color) !important;
+        color: white !important;
+        font-weight: bold;
+    }
+
+    .page-item:hover .page-link {
+        background-color: #f0f0f0;
+        color: var(--primary-color);
+    }
     </style>
 </head>
 <body>
