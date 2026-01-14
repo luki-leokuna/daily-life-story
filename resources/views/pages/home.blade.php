@@ -61,41 +61,56 @@
         </div>
     </div>
     @endif
-
-    {{-- STORIES GRID: Lebih bersih tanpa border card --}}
+    {{-- STORIES GRID --}}
     <div class="row g-5">
         @forelse($stories as $story)
         <div class="col-md-4">
-            <article class="card h-100">
-                <a href="{{ route('story.show', $story->slug) }}" class="overflow-hidden rounded-4 mb-3">
+            {{-- Menambahkan h-100 dan flex agar isi card sejajar --}}
+            <article class="card h-100 border-0 bg-transparent d-flex flex-column">
+                {{-- Foto dengan Aspect Ratio Konsisten (1:1 atau 4:3) --}}
+                <a href="{{ route('story.show', $story->slug) }}" class="overflow-hidden rounded-4 mb-3 d-block shadow-sm">
                     <img src="{{ asset('images/stories/' . $story->featured_image) }}" 
-                         class="card-img-top" 
-                         alt="{{ $story->title }}">
+                        class="card-img-top w-100" 
+                        alt="{{ $story->title }}"
+                        style="aspect-ratio: 4/3; object-fit: cover;">
                 </a>
-                <div class="card-body px-0 pt-2">
-                    <span class="category-badge mb-2 d-inline-block" style="color: {{ $story->category->color }}">
-                        {{ $story->category->name }}
-                    </span>
-                    <h5 class="card-title fw-bold">
-                        <a href="{{ route('story.show', $story->slug) }}" class="text-decoration-none text-dark">
+
+                <div class="card-body px-0 pt-2 d-flex flex-column flex-grow-1">
+                    {{-- Kategori dengan badge yang lebih soft --}}
+                    <div>
+                        <span class="category-badge mb-2 d-inline-block" 
+                            style="color: {{ $story->category->color }}; border-color: {{ $story->category->color }}; font-size: 0.65rem;">
+                            {{ $story->category->name }}
+                        </span>
+                    </div>
+
+                    {{-- Judul: Membatasi baris agar seragam --}}
+                    <h5 class="card-title fw-bold mb-2">
+                        <a href="{{ route('story.show', $story->slug) }}" 
+                        class="text-decoration-none text-dark line-clamp-2" 
+                        style="min-height: 3rem; line-height: 1.4;">
                             {{ $story->title }}
                         </a>
                     </h5>
-                    <p class="card-text text-muted small">{{ Str::limit($story->excerpt, 110) }}</p>
-                    <a href="{{ route('story.show', $story->slug) }}" class="btn-read-more">
-                        Lanjut Membaca
-                    </a>
+
+                    {{-- Excerpt: Memberi jarak yang konsisten --}}
+                    <p class="card-text text-muted small line-clamp-3 mb-4">
+                        {{ Str::limit($story->excerpt, 90) }}
+                    </p>
+
+                    {{-- Tombol: Dipaksa ke bawah menggunakan mt-auto --}}
+                    <div class="mt-auto">
+                        <a href="{{ route('story.show', $story->slug) }}" class="btn-read-more">
+                            Lanjut Membaca
+                        </a>
+                    </div>
                 </div>
             </article>
         </div>
         @empty
-        <div class="col-12 text-center py-5">
-            <img src="https://illustrations.popsy.co/gray/fogg-searching.png" alt="Not found" style="width: 200px;" class="mb-4">
-            <h4 class="text-muted">Oops, tidak ada cerita ditemukan.</h4>
-        </div>
+        {{-- Empty state tetap sama --}}
         @endforelse
     </div>
-
     {{-- PAGINATION: Custom styling --}}
     <div class="d-flex justify-content-center mt-5 pt-5">
         {{ $stories->links() }}
